@@ -1,0 +1,38 @@
+/* Write your CSS here */
+
+.appointmentCards {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 15px;
+  border-color: black;
+  border-width: 2px;
+  border-style: solid;
+  background-color: transparent;
+  margin: 15px;
+}
+.appos {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.headingTitle {
+  font-family: 'roboto';
+  font-size: 20px;
+  font-weight: bold;
+  color: black;
+}
+.para {
+  font-family: 'roboto';
+  font-size: 20px;
+  font-weight: bold;
+}
+.s {
+  margin-top: 20px;
+  height: 20px;
+  width: 20px;
+}
+.starButton {
+  border-width: 0px;
+  background-color: transparent;
+}

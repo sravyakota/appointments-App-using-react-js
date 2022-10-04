@@ -1,0 +1,88 @@
+/* Write your CSS here */
+
+.bg {
+  background-image: linear-gradient(to bottom, #9796f0, #fbc7d4);
+  padding: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.bg2 {
+  border-radius: 15px;
+  background-color: #ffffff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.inputs {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+.inputNames {
+  font-family: 'roboto';
+  font-size: 16px;
+  color: #b5b7c4;
+}
+.inputBox {
+  height: 42px;
+  width: 75%;
+  border-radius: 10px;
+}
+.button {
+  background-color: #8b5cf6;
+  color: #ffffff;
+  font-family: 'roboto';
+  font-size: 16px;
+  height: 32px;
+  width: 60px;
+  border-radius: 10px;
+  border-width: 0px;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+.starredButton {
+  border-color: #8b5cf6;
+  color: #8b5cf6;
+  background-color: transparent;
+  font-family: 'roboto';
+  font-size: 14px;
+  height: 30px;
+  width: 100px;
+  border-radius: 75px;
+  border-width: 2px;
+  margin-top: 20px;
+}
+.hLine {
+  width: 100%;
+  background-color: black;
+}
+.list {
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.listOfAppointments {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px;
+}
+.h {
+  font-size: 24px;
+}
+@media screen and (max-width: 576px) {
+  .imgContainer {
+    display: none;
+  }
+}
