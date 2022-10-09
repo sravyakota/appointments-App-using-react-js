@@ -1,163 +1,141 @@
-// Write your code here
 import {Component} from 'react'
 import {v4} from 'uuid'
+import {format} from 'date-fns'
 
 import AppointmentItem from '../AppointmentItem'
 
 import './index.css'
 
 class Appointments extends Component {
-  state = {titleInput: '', dateInput: '', appointmentList: [], sA: false}
-
-  starredAppointments = () => {
-    this.setState(prevState => ({sA: !prevState.sA}))
+  state = {
+    appointmentsList: [],
+    titleInput: '',
+    dateInput: '',
+    isFilterActive: false,
   }
 
-  addingAppointments = () => {
+  toggleIsStarred = id => {
+    this.setState(prevState => ({
+      appointmentsList: prevState.appointmentsList.map(eachAppointment => {
+        if (id === eachAppointment.id) {
+          return {...eachAppointment, isStarred: !eachAppointment.isStarred}
+        }
+        return eachAppointment
+      }),
+    }))
+  }
+
+  onFilter = () => {
+    const {isFilterActive} = this.state
+
+    this.setState({
+      isFilterActive: !isFilterActive,
+    })
+  }
+
+  onChangeDateInput = event => {
+    this.setState({dateInput: event.target.value})
+  }
+
+  onChangeTitleInput = event => {
+    this.setState({titleInput: event.target.value})
+  }
+
+  onAddAppointment = event => {
+    event.preventDefault()
     const {titleInput, dateInput} = this.state
-    const days = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-    ]
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ]
-
-    const modifiedDate = new Date(dateInput)
-    const day = days[modifiedDate.getDay()]
-    const month = months[modifiedDate.getMonth()]
-    const d = modifiedDate.getDate()
-    const yr = modifiedDate.getFullYear()
-
-    console.log(modifiedDate)
-
-    const newList = {
+    const formattedDate = dateInput
+      ? format(new Date(dateInput), 'dd MMMM yyyy, EEEE')
+      : ''
+    const newAppointment = {
       id: v4(),
       title: titleInput,
-      date: `${d} ${month} ${yr}, ${day}`,
+      date: formattedDate,
       isStarred: false,
     }
 
     this.setState(prevState => ({
-      appointmentList: [...prevState.appointmentList, newList],
+      appointmentsList: [...prevState.appointmentsList, newAppointment],
       titleInput: '',
       dateInput: '',
     }))
   }
 
-  titleChange = event => {
-    this.setState({titleInput: event.target.value})
-  }
+  getFilteredAppointmentsList = () => {
+    const {appointmentsList, isFilterActive} = this.state
 
-  dateChange = event => {
-    this.setState({dateInput: event.target.value})
-  }
-
-  toggleIsStared = id => {
-    this.setState(prevState => ({
-      appointmentList: prevState.appointmentList.map(each => {
-        if (id === each.id) {
-          return {...each, isStarred: !each.isStarred}
-        }
-        return each
-      }),
-    }))
+    if (isFilterActive) {
+      return appointmentsList.filter(
+        eachTransaction => eachTransaction.isStarred === true,
+      )
+    }
+    return appointmentsList
   }
 
   render() {
-    const {appointmentList, sA} = this.state
-    console.log(sA)
-
-    if (sA === true) {
-      appointmentList.filter(each => each.isStarred === true)
-    }
+    const {titleInput, dateInput, isFilterActive} = this.state
+    const filterClassName = isFilterActive ? 'filter-filled' : 'filter-empty'
+    const filteredAppointmentsList = this.getFilteredAppointmentsList()
 
     return (
-      <div className="bg">
-        <div className="bg2">
-          <div className="container">
-            <div className="appointmentsContainer">
-              <h1>Add Appointment</h1>
-              <form>
-                <div className="inputs">
-                  <label htmlFor="Title" className="inputNames">
-                    TITLE:
-                  </label>
-                  <input
-                    id="Title"
-                    type="text"
-                    placeholder="text here"
-                    className="inputBox"
-                    onChange={this.titleChange}
-                  />
-                </div>
-                <div className="inputs">
-                  <label htmlFor="Date" className="inputNames">
-                    DATE:
-                  </label>
-                  <input
-                    id="Date"
-                    type="date"
-                    placeholder="dd/mm/yy"
-                    className="inputBox"
-                    onChange={this.dateChange}
-                  />
-                </div>
-                <button
-                  type="button"
-                  className="button"
-                  onClick={this.addingAppointments}
-                >
+      <div className="app-container">
+        <div className="responsive-container">
+          <div className="appointments-container">
+            <div className="add-appointment-container">
+              <form className="form" onSubmit={this.onAddAppointment}>
+                <h1 className="add-appointment-heading">Add Appointment</h1>
+                <label htmlFor="title" className="label">
+                  TITLE
+                </label>
+                <input
+                  type="text"
+                  id="title"
+                  value={titleInput}
+                  onChange={this.onChangeTitleInput}
+                  className="input"
+                  placeholder="Title"
+                />
+                <label htmlFor="date" className="label">
+                  DATE
+                </label>
+                <input
+                  type="date"
+                  id="date"
+                  value={dateInput}
+                  onChange={this.onChangeDateInput}
+                  className="input"
+                />
+                <button type="submit" className="add-button">
                   Add
                 </button>
               </form>
-            </div>
-            <div className="imgContainer">
               <img
                 src="https://assets.ccbp.in/frontend/react-js/appointments-app/appointments-img.png"
                 alt="appointments"
+                className="appointments-img"
               />
             </div>
+            <hr className="hr" />
+            <div className="header-with-filter-container">
+              <h1 className="appointments-heading">Appointments</h1>
+              <button
+                type="button"
+                className={`filter-style ${filterClassName}`}
+                onClick={this.onFilter}
+              >
+                Starred
+              </button>
+            </div>
+            <ul className="appointments-list">
+              {filteredAppointmentsList.map(eachAppointment => (
+                <AppointmentItem
+                  key={eachAppointment.id}
+                  appointmentDetails={eachAppointment}
+                  toggleIsStarred={this.toggleIsStarred}
+                />
+              ))}
+            </ul>
           </div>
-          <hr className="hLine" />
-
-          <div className="listOfAppointments">
-            <h1 className="h">Appointments</h1>
-            <button
-              type="button"
-              className="starredButton"
-              onClick={this.starredAppointments}
-            >
-              Starred
-            </button>
-          </div>
-          <ul className="list">
-            {appointmentList.map(each => (
-              <AppointmentItem
-                title={each.title}
-                date={each.date}
-                key={each.id}
-                toggleIsStared={this.toggleIsStared}
-                id={each.id}
-              />
-            ))}
-          </ul>
         </div>
       </div>
     )
